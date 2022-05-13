@@ -23,6 +23,7 @@ async function run() {
     const graphOneData = client.db("freshta").collection("dataOne");
     const graphTwoData = client.db("freshta").collection("dataTwo");
 
+    // Area Chart Data
     app.get("/dataOne", async (req, res) => {
       const query = {};
       const cursor = graphOneData.find(query);
@@ -30,6 +31,7 @@ async function run() {
       res.send(datasOne);
     });
 
+    // Bar Chart Data
     app.get("/dataTwo", async (req, res) => {
       const query = {};
       const cursor = graphTwoData.find(query);
@@ -37,6 +39,7 @@ async function run() {
       res.send(datasTwo);
     });
 
+    // Products Data
     app.get("/products", async (req, res) => {
       const query = {};
       const cursor = productCollection.find(query);
@@ -91,7 +94,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Running Server");
+  res.send("Running Server freshta");
 });
 
 app.listen(port, () => {
