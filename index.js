@@ -3,7 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 const app = express();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 //middleware
 app.use(cors());
@@ -20,6 +20,22 @@ async function run() {
   try {
     await client.connect();
     const productCollection = client.db("freshta").collection("products");
+    const graphOneData = client.db("freshta").collection("dataOne");
+    const graphTwoData = client.db("freshta").collection("dataTwo");
+
+    app.get("/dataOne", async (req, res) => {
+      const query = {};
+      const cursor = graphOneData.find(query);
+      const datasOne = await cursor.toArray();
+      res.send(datasOne);
+    });
+
+    app.get("/dataTwo", async (req, res) => {
+      const query = {};
+      const cursor = graphTwoData.find(query);
+      const datasTwo = await cursor.toArray();
+      res.send(datasTwo);
+    });
 
     app.get("/products", async (req, res) => {
       const query = {};
@@ -27,11 +43,46 @@ async function run() {
       const products = await cursor.toArray();
       res.send(products);
     });
+    app.get("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const product = await productCollection.findOne(query);
+      res.send(product);
+    });
 
     // POST
-    app.post("/products", async (req, res) => {
+    app.post("/product", async (req, res) => {
       const newProduct = req.body;
       const result = await productCollection.insertOne(newProduct);
+      res.send(result);
+    });
+
+    // DELETE;
+    app.delete("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // update
+    app.put("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      // console.log("data is", data);
+      const updatedDoc = {
+        $set: {
+          quantity: data.updatedQuantity,
+        },
+      };
+      const result = await productCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      console.log("updated", updatedDoc);
       res.send(result);
     });
   } finally {
