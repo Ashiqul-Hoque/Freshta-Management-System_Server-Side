@@ -70,11 +70,11 @@ async function run() {
 
     // update
     app.put("/products/:id", async (req, res) => {
+      console.log("test:" + req);
       const id = req.params.id;
       const data = req.body;
       const filter = { _id: ObjectId(id) };
       const options = { upsert: true };
-      // console.log("data is", data);
       const updatedDoc = {
         $set: {
           quantity: data.updatedQuantity,
