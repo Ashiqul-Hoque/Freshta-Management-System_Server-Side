@@ -70,7 +70,6 @@ async function run() {
 
     // update
     app.put("/products/:id", async (req, res) => {
-      console.log("test:" + req);
       const id = req.params.id;
       const data = req.body;
       const filter = { _id: ObjectId(id) };
