@@ -2,7 +2,7 @@
 
 ## Live site: https://freshta-management-system.web.app/
 
-## Github link (Client site): https://github.com/ProgrammingHeroWC4/warehouse-management-client-side-Ashiqul-Hoque
+## Github link (Client site): https://github.com/Ashiqul-Hoque/Freshta-Management-System_-Client-Side-
 
 ## Project Summary:
 
